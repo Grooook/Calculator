@@ -1,0 +1,6 @@
+
+*.iml
+*.xml
+*.pth
+Calculator/venv/Lib/site-packages/pip-19.0.3-py3.8.egg/EGG-INFO/PKG-INFO
+*.txt
