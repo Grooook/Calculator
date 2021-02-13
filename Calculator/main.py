@@ -3,7 +3,7 @@ from PyQt5.uic import loadUi
 import sys
 import math
 from decimal import *
-
+import keyboard
 
 class Gui_calculator(QtWidgets.QMainWindow):
     def __init__(self, request='', main_page_show=True):
@@ -18,6 +18,7 @@ class Gui_calculator(QtWidgets.QMainWindow):
         loadUi('UI/Calc_Gui.ui', self)
         self.set_align()
         self.set_buttons()
+        self.key_press()
 
     def set_align(self):
         self.set_state("0")
@@ -54,6 +55,28 @@ class Gui_calculator(QtWidgets.QMainWindow):
         self.pb_clear.clicked.connect(self.reset)
         self.pb_back.clicked.connect(self.backspace)
 
+    def key_press(self):
+        keyboard.on_press_key("0", lambda _: self.click_num('0'))
+        keyboard.on_press_key("1", lambda _: self.click_num('1'))
+        keyboard.on_press_key("2", lambda _: self.click_num('2'))
+        keyboard.on_press_key("3", lambda _: self.click_num('3'))
+        keyboard.on_press_key("4", lambda _: self.click_num('4'))
+        keyboard.on_press_key("5", lambda _: self.click_num('5'))
+        keyboard.on_press_key("6", lambda _: self.click_num('6'))
+        keyboard.on_press_key("7", lambda _: self.click_num('7'))
+        keyboard.on_press_key("8", lambda _: self.click_num('8'))
+        keyboard.on_press_key("9", lambda _: self.click_num('9'))
+        keyboard.on_press_key(".", lambda _: self.click_num('.'))
+        keyboard.on_press_key(",", lambda _: self.click_num('.'))
+        keyboard.on_press_key("/", lambda _: self.click_operation('/'))
+        keyboard.on_press_key("*", lambda _: self.click_operation('*'))
+        keyboard.on_press_key("-", lambda _: self.click_operation('-'))
+        keyboard.on_press_key("+", lambda _: self.click_operation('+'))
+        keyboard.on_press_key("%", lambda _: self.click_operation('%'))
+        keyboard.on_press_key("backspace", lambda _: self.backspace())
+        keyboard.on_press_key("=", lambda _: self.equal_result())
+        keyboard.on_press_key("c", lambda _: self.reset())
+
     def backspace(self):
         if len(self.curent_num) > 0:
             self.curent_num = self.curent_num[:-1]
@@ -70,9 +93,7 @@ class Gui_calculator(QtWidgets.QMainWindow):
         self.print_log()
 
     def equal_result(self):
-        if len(self.nums) == 1 and self.curent_num == '':
-            pass
-        elif len(self.nums) >= 1:
+        if len(self.nums) >= 1:
             if self.curent_num != '':
                 self.click_operation(self.operations[-1])
 
@@ -181,7 +202,7 @@ class Gui_calculator(QtWidgets.QMainWindow):
         elif num == '.':
             if self.curent_num == '':
                 self.curent_num = '0.'
-            else:
+            elif self.curent_num.find('.') == 0:
                 self.curent_num += num
         elif num == '+/-':
             if self.curent_num == '':
